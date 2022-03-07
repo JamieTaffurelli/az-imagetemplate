@@ -8,9 +8,9 @@ variable "location" {
   description = "Location to deploy resources"
 }
 
-variable "image_builder_template_path" {
+variable "image_template_file_name" {
   type        = string
-  description = "Path to image builder template"
+  description = "Name of arm template file that defines image"
 }
 
 variable "image_template_name" {
@@ -31,21 +31,6 @@ variable "gallery_name" {
 variable "gallery_image_name" {
   type        = string
   description = "Name of Shared Image Gallery Image"
-}
-
-variable "source_image_publisher" {
-  type        = string
-  description = "Name of the source image publisher"
-}
-
-variable "source_image_offer" {
-  type        = string
-  description = "Name of the source image offer"
-}
-
-variable "source_image_sku" {
-  type        = string
-  description = "Name of the source image sku"
 }
 
 variable "artifact_tags" {
