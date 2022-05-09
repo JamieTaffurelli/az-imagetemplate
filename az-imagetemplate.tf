@@ -27,13 +27,13 @@ resource "azurerm_resource_group_template_deployment" "images" {
       value = data.azurerm_shared_image.images.id
     },
     "sourceImagePublisher" = {
-      value = data.azurerm_shared_image.images.identifier.publisher
+      value = data.azurerm_shared_image.images.identifier[0].publisher
     },
     "sourceImageOffer" = {
-      value = data.azurerm_shared_image.images.identifier.offer
+      value = data.azurerm_shared_image.images.identifier[0].offer
     },
     "sourceImageSku" = {
-      value = data.azurerm_shared_image.images.identifier.sku
+      value = data.azurerm_shared_image.images.identifier[0].sku
     },
     "artifactTags" = {
       value = var.artifact_tags
