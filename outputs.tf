@@ -1,4 +1,4 @@
 output "image_template_resource_id" {
-  value = jsondecode(azurerm_resource_group_template_deployment.images.output_content).resourceID.value
+  value       = jsondecode(azurerm_resource_group_template_deployment.images.output_content).resourceID.value
   description = "Resource ID of the image template"
 }
