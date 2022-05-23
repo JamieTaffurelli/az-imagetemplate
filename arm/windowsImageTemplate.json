@@ -91,26 +91,32 @@
           {
             "type": "PowerShell",
             "name": "SetDSCKey",
-            "inline": ["New-Item -Path HKLM:\\Software\\Microsoft\\DesiredStateConfiguration; New-ItemProperty -Path HKLM:\\Software\\Microsoft\\DesiredStateConfiguration -Name 'AgentId' -PropertyType STRING -Force"],
+            "inline": [
+              "New-Item -Path HKLM:\\Software\\Microsoft\\DesiredStateConfiguration; New-ItemProperty -Path HKLM:\\Software\\Microsoft\\DesiredStateConfiguration -Name 'AgentId' -PropertyType STRING -Force"
+            ],
             "runElevated": true
           },
           {
             "type": "PowerShell",
             "name": "InstallChoco",
-            "inline": ["Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"],
+            "inline": [
+              "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
+            ],
             "runElevated": true
           },
           {
             "type": "PowerShell",
             "name": "InstallChocoPackages",
-            "inline": ["choco install 7zip az.powershell azure-cli awscli googlechrome treesizefree notepadplusplus -y"],
+            "inline": [
+              "choco install 7zip az.powershell azure-cli awscli googlechrome treesizefree notepadplusplus -y"
+            ],
             "runElevated": true
           },
-          { 
-             "type": "PowerShell",
-             "name": "ServerHardening",
-             "scriptUri": "https://configsajdn.blob.core.windows.net/scripts/windows-server-hardening.ps1",
-             "runElevated": true
+          {
+            "type": "PowerShell",
+            "name": "ServerHardening",
+            "scriptUri": "https://configsajdn.blob.core.windows.net/scripts/windows-server-hardening.ps1",
+            "runElevated": true
           }
         ],
         "distribute": [
@@ -125,5 +131,11 @@
         ]
       }
     }
-  ]
+  ],
+  "outputs": {
+    "resourceID": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.VirtualMachineImages/imageTemplates', parameters('imageTemplateName'))).id]"
+    }
+  }
 }
