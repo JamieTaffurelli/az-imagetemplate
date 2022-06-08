@@ -22,6 +22,9 @@ jobs:
       with:
         terraform_version: 1.1.8
         terraform_wrapper: false
+
+    - name: Terraform tfsec
+      uses: aquasecurity/tfsec-action@v1.0.2
     
     - name: Terraform Init
       run: terraform init
@@ -47,6 +50,6 @@ jobs:
         version: latest
         working-directory: test/unit/
 
-    - name: Terratest
+    - name: Unit Tests
       working-directory: test/unit/
       run: go test -v
