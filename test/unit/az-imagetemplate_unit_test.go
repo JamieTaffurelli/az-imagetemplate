@@ -16,7 +16,7 @@ func showTerraformPlanAsJSON(t *testing.T) *gojq.JQ {
 		Vars: map[string]interface{}{
 			"resource_group_name":       "testrg",
 			"location":                  "francecentral",
-			"image_gallery_name":        "imggal",
+			"image_template_name":       "imgtemplate",
 			"image_gallery_description": "Image Gallery Description",
 			"images": map[string]interface{}{
 				"image": map[string]interface{}{

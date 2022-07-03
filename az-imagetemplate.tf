@@ -12,7 +12,7 @@ data "azurerm_shared_image" "images" {
 resource "azurerm_resource_group_template_deployment" "images" {
   name                = var.image_template_name
   resource_group_name = var.resource_group_name
-  template_content    = file("az-imagetemplate\\arm\\${var.image_template_file_name}")
+  template_content    = file("arm/windowsImageTemplate.json")
   parameters_content = jsonencode({
     "imageTemplateName" = {
       value = var.image_template_name

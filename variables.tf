@@ -7,12 +7,6 @@ variable "location" {
   type        = string
   description = "Location to deploy resources"
 }
-
-variable "image_template_file_name" {
-  type        = string
-  description = "Name of arm template file that defines image"
-}
-
 variable "image_template_name" {
   type        = string
   description = "Name of Image Template to deploy"
