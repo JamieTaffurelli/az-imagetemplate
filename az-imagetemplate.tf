@@ -9,7 +9,7 @@ data "azurerm_shared_image" "images" {
   resource_group_name = var.resource_group_name
 }
 
-resource "azurerm_resource_group_template_deployment" "images" {
+resource "azurerm_resource_group_template_deployment" "image" {
   name                = var.image_template_name
   resource_group_name = var.resource_group_name
   template_content    = file("arm/windowsImageTemplate.json")
@@ -24,16 +24,16 @@ resource "azurerm_resource_group_template_deployment" "images" {
       value = data.azurerm_user_assigned_identity.images.id
     },
     "galleryImageId" = {
-      value = data.azurerm_shared_image.images.id
+      value = data.azurerm_shared_image.image.id
     },
     "sourceImagePublisher" = {
-      value = data.azurerm_shared_image.images.identifier[0].publisher
+      value = data.azurerm_shared_image.image.identifier[0].publisher
     },
     "sourceImageOffer" = {
-      value = data.azurerm_shared_image.images.identifier[0].offer
+      value = data.azurerm_shared_image.image.identifier[0].offer
     },
     "sourceImageSku" = {
-      value = data.azurerm_shared_image.images.identifier[0].sku
+      value = data.azurerm_shared_image.image.identifier[0].sku
     },
     "artifactTags" = {
       value = var.artifact_tags

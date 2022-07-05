@@ -18,17 +18,7 @@ func showTerraformPlanAsJSON(t *testing.T) *gojq.JQ {
 			"location":                  "francecentral",
 			"image_template_name":       "imgtemplate",
 			"image_gallery_description": "Image Gallery Description",
-			"images": map[string]interface{}{
-				"image": map[string]interface{}{
-					"name":        "windows",
-					"os_type":     "Windows",
-					"description": "Windows description",
-					"publisher":   "Windows",
-					"offer":       "2016-datacenter",
-					"sku":         "WindowsServer",
-				},
-			},
-			"tags": map[string]string{},
+			"tags":                      map[string]string{},
 		},
 		NoColor: true,
 	}
