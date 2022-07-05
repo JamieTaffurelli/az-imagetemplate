@@ -1,129 +1,141 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
+  "outputs": {
+    "resourceID": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.VirtualMachineImages/imageTemplates', parameters('imageTemplateName'))).id]"
+    }
+  },
   "parameters": {
+    "artifactTags": {
+      "type": "Object"
+    },
+    "buildTimeoutInMinutes": {
+      "defaultValue": 300,
+      "type": "Int"
+    },
+    "galleryImageId": {
+      "type": "String"
+    },
     "imageTemplateName": {
       "type": "String"
     },
     "location": {
       "type": "String"
     },
-    "userAssignedIdentityId": {
-      "type": "String"
-    },
-    "galleryImageId": {
-      "type": "String"
-    },
-    "vmSize": {
-      "type": "String",
-      "defaultValue": "Standard_D2s_v4"
-    },
     "osDiskSizeGB": {
-      "type": "Int",
-      "defaultValue": 0
-    },
-    "buildTimeoutInMinutes": {
-      "type": "Int",
-      "defaultValue": 300
-    },
-    "sourceImagePublisher": {
-      "type": "String"
+      "defaultValue": 0,
+      "type": "Int"
     },
     "sourceImageOffer": {
+      "type": "String"
+    },
+    "sourceImagePublisher": {
       "type": "String"
     },
     "sourceImageSku": {
       "type": "String"
     },
-    "artifactTags": {
-      "type": "Object"
-    },
-    "replicationRegions": {
-      "type": "Array"
-    },
     "storageAccountType": {
-      "type": "String",
-      "defaultValue": "Standard_ZRS"
+      "defaultValue": "Standard_ZRS",
+      "type": "String"
     },
     "tags": {
       "type": "Object"
+    },
+    "userAssignedIdentityId": {
+      "type": "String"
+    },
+    "vmSize": {
+      "defaultValue": "Standard_D2s_v4",
+      "type": "String"
     }
   },
-  "variables": {},
   "resources": [
     {
-      "name": "[parameters('imageTemplateName')]",
-      "type": "Microsoft.VirtualMachineImages/imageTemplates",
       "apiVersion": "2020-02-14",
-      "location": "[parameters('location')]",
-      "tags": "[parameters('tags')]",
       "identity": {
         "type": "UserAssigned",
         "userAssignedIdentities": {
           "[parameters('userAssignedIdentityId')]": {}
         }
       },
+      "location": "[parameters('location')]",
+      "name": "[parameters('imageTemplateName')]",
       "properties": {
         "buildTimeoutInMinutes": "[parameters('buildTimeoutInMinutes')]",
-        "vmProfile": {
-          "vmSize": "[parameters('vmSize')]",
-          "osDiskSizeGB": "[parameters('osDiskSizeGB')]"
-        },
-        "source": {
-          "type": "PlatformImage",
-          "publisher": "[parameters('sourceImagePublisher')]",
-          "offer": "[parameters('sourceImageOffer')]",
-          "sku": "[parameters('sourceImageSku')]",
-          "version": "latest"
-        },
         "customize": [
           {
-            "type": "WindowsUpdate",
+            "filters": [
+              "exclude:$_.Title -like '*Preview*'",
+              "include:$true"
+            ],
             "searchCriteria": "IsInstalled=0",
-            "filters": ["exclude:$_.Title -like '*Preview*'", "include:$true"],
+            "type": "WindowsUpdate",
             "updateLimit": 1000
           },
           {
-            "type": "WindowsRestart",
             "restartCheckCommand": "echo Azure-Image-Builder-Restarted-the-VM  > c:\\image-builder\\azureImageBuilderRestart.txt",
-            "restartTimeout": "60m"
+            "restartTimeout": "60m",
+            "type": "WindowsRestart"
           },
           {
-            "type": "PowerShell",
+            "inline": [
+              "New-Item -Path HKLM:\\Software\\Microsoft\\DesiredStateConfiguration; New-ItemProperty -Path HKLM:\\Software\\Microsoft\\DesiredStateConfiguration -Name 'AgentId' -PropertyType STRING -Force"
+            ],
             "name": "SetDSCKey",
-            "inline": ["New-Item -Path HKLM:\\Software\\Microsoft\\DesiredStateConfiguration; New-ItemProperty -Path HKLM:\\Software\\Microsoft\\DesiredStateConfiguration -Name 'AgentId' -PropertyType STRING -Force"],
-            "runElevated": true
+            "runElevated": true,
+            "type": "PowerShell"
           },
           {
-            "type": "PowerShell",
+            "inline": [
+              "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
+            ],
             "name": "InstallChoco",
-            "inline": ["Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"],
-            "runElevated": true
+            "runElevated": true,
+            "type": "PowerShell"
           },
           {
-            "type": "PowerShell",
+            "inline": [
+              "choco install 7zip az.powershell azure-cli awscli googlechrome treesizefree notepadplusplus -y"
+            ],
             "name": "InstallChocoPackages",
-            "inline": ["choco install 7zip az.powershell azure-cli awscli googlechrome treesizefree notepadplusplus -y"],
-            "runElevated": true
+            "runElevated": true,
+            "type": "PowerShell"
           },
-          { 
-             "type": "PowerShell",
-             "name": "ServerHardening",
-             "scriptUri": "https://configsajdn.blob.core.windows.net/scripts/windows-server-hardening.ps1",
-             "runElevated": true
+          {
+            "name": "ServerHardening",
+            "runElevated": true,
+            "scriptUri": "https://configsajdn.blob.core.windows.net/scripts/windows-server-hardening.ps1",
+            "type": "PowerShell"
           }
         ],
         "distribute": [
           {
-            "type": "SharedImage",
-            "galleryImageId": "[parameters('galleryImageId')]",
-            "runOutputName": "[parameters('imageTemplateName')]",
             "artifactTags": "[parameters('artifactTags')]",
-            "replicationRegions": "[parameters('replicationRegions')]",
-            "storageAccountType": "[parameters('storageAccountType')]"
+            "galleryImageId": "[parameters('galleryImageId')]",
+            "replicationRegions": "[parameters('location')]",
+            "runOutputName": "[parameters('imageTemplateName')]",
+            "storageAccountType": "[parameters('storageAccountType')]",
+            "type": "SharedImage"
           }
-        ]
-      }
+        ],
+        "source": {
+          "offer": "[parameters('sourceImageOffer')]",
+          "publisher": "[parameters('sourceImagePublisher')]",
+          "sku": "[parameters('sourceImageSku')]",
+          "type": "PlatformImage",
+          "version": "latest"
+        },
+        "vmProfile": {
+          "osDiskSizeGB": "[parameters('osDiskSizeGB')]",
+          "vmSize": "[parameters('vmSize')]"
+        }
+      },
+      "tags": "[parameters('tags')]",
+      "type": "Microsoft.VirtualMachineImages/imageTemplates"
     }
-  ]
+  ],
+  "variables": {}
 }

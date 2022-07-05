@@ -7,12 +7,6 @@ variable "location" {
   type        = string
   description = "Location to deploy resources"
 }
-
-variable "image_template_file_name" {
-  type        = string
-  description = "Name of arm template file that defines image"
-}
-
 variable "image_template_name" {
   type        = string
   description = "Name of Image Template to deploy"
@@ -36,11 +30,6 @@ variable "gallery_image_name" {
 variable "artifact_tags" {
   type        = map(string)
   description = "Image artifact tags"
-}
-
-variable "replication_regions" {
-  type        = list(string)
-  description = "Image replication regions"
 }
 
 variable "tags" {
