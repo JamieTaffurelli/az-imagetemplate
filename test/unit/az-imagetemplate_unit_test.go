@@ -17,7 +17,7 @@ func showTerraformPlanAsJSON(t *testing.T) *gojq.JQ {
 			"resource_group_name": "testrg",
 			"location":            "francecentral",
 			"image_template_name": "imgtemplate",
-			"artifact_tags":       {"os": "Windows"},
+			"artifact_tags":       map[string]string{"os": "Windows"},
 			"tags":                map[string]string{},
 		},
 		NoColor: true,
