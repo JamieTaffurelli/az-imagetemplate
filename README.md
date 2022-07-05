@@ -37,7 +37,6 @@ No modules.
 | <a name="input_gallery_name"></a> [gallery\_name](#input\_gallery\_name) | Name of Shared Image Gallery | `string` | n/a | yes |
 | <a name="input_image_template_name"></a> [image\_template\_name](#input\_image\_template\_name) | Name of Image Template to deploy | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | Location to deploy resources | `string` | n/a | yes |
-| <a name="input_replication_regions"></a> [replication\_regions](#input\_replication\_regions) | Image replication regions | `list(string)` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Name of the Resource Group to deploy to | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to resources | `map(string)` | n/a | yes |
 | <a name="input_user_assigned_identity_name"></a> [user\_assigned\_identity\_name](#input\_user\_assigned\_identity\_name) | Name of user assigned identity for image builder | `string` | n/a | yes |
