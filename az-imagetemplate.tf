@@ -1,9 +1,9 @@
-data "azurerm_user_assigned_identity" "images" {
+data "azurerm_user_assigned_identity" "image" {
   name                = var.user_assigned_identity_name
   resource_group_name = var.resource_group_name
 }
 
-data "azurerm_shared_image" "images" {
+data "azurerm_shared_image" "image" {
   name                = var.gallery_image_name
   gallery_name        = var.gallery_name
   resource_group_name = var.resource_group_name
@@ -21,7 +21,7 @@ resource "azurerm_resource_group_template_deployment" "image" {
       value = var.location
     },
     "userAssignedIdentityId" = {
-      value = data.azurerm_user_assigned_identity.images.id
+      value = data.azurerm_user_assigned_identity.image.id
     },
     "galleryImageId" = {
       value = data.azurerm_shared_image.image.id
