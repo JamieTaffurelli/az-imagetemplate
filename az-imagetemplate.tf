@@ -38,9 +38,6 @@ resource "azurerm_resource_group_template_deployment" "image" {
     "artifactTags" = {
       value = var.artifact_tags
     },
-    "replicationRegions" = {
-      value = var.replication_regions
-    }
     "tags" = {
       value = var.tags
     }

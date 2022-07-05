@@ -14,11 +14,10 @@ func showTerraformPlanAsJSON(t *testing.T) *gojq.JQ {
 	tfOptions := &terraform.Options{
 		TerraformDir: "../../",
 		Vars: map[string]interface{}{
-			"resource_group_name":       "testrg",
-			"location":                  "francecentral",
-			"image_template_name":       "imgtemplate",
-			"image_gallery_description": "Image Gallery Description",
-			"tags":                      map[string]string{},
+			"resource_group_name": "testrg",
+			"location":            "francecentral",
+			"image_template_name": "imgtemplate",
+			"tags":                map[string]string{},
 		},
 		NoColor: true,
 	}

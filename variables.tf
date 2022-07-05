@@ -32,11 +32,6 @@ variable "artifact_tags" {
   description = "Image artifact tags"
 }
 
-variable "replication_regions" {
-  type        = list(string)
-  description = "Image replication regions"
-}
-
 variable "tags" {
   type        = map(string)
   description = "Tags to apply to resources"
